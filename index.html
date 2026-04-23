@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baccarat Killer PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: radial-gradient(circle at 15% 15%, #1e3a8a 0%, transparent 35%),
+                        radial-gradient(circle at 85% 20%, #7f1d1d 0%, transparent 40%),
+                        radial-gradient(circle at 50% 90%, #065f46 0%, transparent 45%),
+                        linear-gradient(180deg, #05070c, #0b0d14, #0f1117);
+            color: #e2e8f0;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; padding: 12px; overflow-x: hidden;
+        }
+        .app {
+            max-width: 480px; width: 100%;
+            background: rgba(10, 12, 20, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.6s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h5 {
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 20px; font-size: 1.6rem; font-weight: 900;
+            letter-spacing: 2px; color: #fff; padding: 12px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, #dc2626, #7f1d1d);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            text-transform: uppercase;
+            position: relative; overflow: hidden;
+        }
+        h5::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 15px;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-label { font-size: 0.65rem; color: #94a3b8; display: block; }
+        .stat-value { font-size: 1rem; font-weight: 800; }
+        .val-p { color: #60a5fa; }
+        .val-b { color: #f87171; }
+        .val-t { color: #34d399; }
+
+        /* Rate Box */
+        .rate-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
+        .rate-item {
+            background: #111827; border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 5px; border-radius: 12px; text-align: center; transition: 0.3s;
+        }
+        .rate-item.best { background: linear-gradient(145deg, #052e16, #16a34a); border-color: #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.4); }
+        .rate-item.blink { animation: pulseBlink 1s infinite; }
+        @keyframes pulseBlink { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+        .rate-name { font-size: 0.7rem; color: #94a3b8; display: block; margin-bottom: 4px; }
+        .rate-percent { font-size: 1.1rem; font-weight: 800; display: block; }
+        
+        /* New: Bet Prediction inside Rate Item */
+        .rate-prediction {
+            font-size: 1.4rem; font-weight: 900; display: block; margin-top: 5px;
+            text-shadow: 0 0 10px currentColor;
+        }
+        .bet-p-text { color: #3b82f6; }
+        .bet-b-text { color: #ef4444; }
+        .bet-wait-text { color: #64748b; }
+
+        /* Bead Road - 6 rows per column */
+        .panel { background: #0f172a; border-radius: 10px; border: 1px solid #1e293b; margin-bottom: 10px; overflow: hidden; }
+        .panel-title { font-size: 0.7rem; padding: 5px 10px; background: #1e293b; color: #94a3b8; }
+        .bead-grid {
+            display: grid;
+            grid-auto-flow: column;
+            grid-template-rows: repeat(6, 18px);
+            gap: 0px;
+            column-gap: 0px;
+            padding: 2px;
+            justify-content: start;
+            width: max-content;
+            min-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .bead { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
+        .bead.p { background: #2563eb; box-shadow: 0 0 8px rgba(37,99,235,0.5); }
+        .bead.b { background: #dc2626; box-shadow: 0 0 8px rgba(220,38,38,0.5); }
+        .bead.t { background: #16a34a; box-shadow: 0 0 8px rgba(22,163,74,0.5); }
+
+        /* Formula Tables */
+        .formula-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .formula-table-wrapper { background: #0f172a; border-radius: 10px; padding: 8px; border: 1px solid #1e293b; }
+        .formula-label { font-size: 0.7rem; color: #64748b; margin-bottom: 5px; display: block; }
+        table { border-collapse: collapse; width: 100%; }
+        td {
+            width: 16px; height: 16px; border: 1px solid #1e293b; font-size: 9px; text-align: center;
+            background-size: cover;
+        }
+        td.win { background-color: rgba(34, 197, 94, 0.2); color: #4ade80; position: relative; }
+        td.win::after { content: '✔'; font-size: 8px; }
+        td.loss { background-color: rgba(239, 68, 68, 0.2); color: #f87171; position: relative; }
+        td.loss::after { content: '✘'; font-size: 8px; }
+
+        /* Buttons */
+        .btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; }
+        .btn {
+            padding: 15px 0; border-radius: 12px; border: none; font-weight: 800; font-size: 1.2rem;
+            cursor: pointer; transition: 0.2s; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-p { background: linear-gradient(145deg, #2563eb, #1e40af); box-shadow: 0 4px 15px rgba(37,99,235,0.3); }
+        .btn-b { background: linear-gradient(145deg, #dc2626, #991b1b); box-shadow: 0 4px 15px rgba(220,38,38,0.3); }
+        .btn-t { background: linear-gradient(145deg, #16a34a, #14532d); box-shadow: 0 4px 15px rgba(22,163,74,0.3); }
+        
+        .action-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-action {
+            padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+            background: #1e293b; color: #e2e8f0; font-weight: 600; cursor: pointer;
+        }
+        .btn-clr { background: #450a0a; color: #f87171; }
+
+        /* Settings */
+        .settings { margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .chk-label {
+            font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; background: #1e293b;
+            cursor: pointer; border: 1px solid transparent; transition: 0.2s;
+        }
+        .chk-label.active { background: #312e81; border-color: #6366f1; color: #fff; }
+        .chk-label input { display: none; }
+
+        /* Overlay */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000;
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .overlay.show { display: flex; }
+        .modal { background: #1a1d27; border-radius: 20px; padding: 30px; text-align: center; max-width: 320px; border: 1px solid #334155; }
+        .modal h3 { color: #f59e0b; margin-bottom: 10px; }
+        .modal p { font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
+        .modal button { background: #4f46e5; color: #fff; border: none; padding: 10px 30px; border-radius: 10px; cursor: pointer; }
+    
+    .expiry-box{
+    text-align:center;
+    margin: 8px 0 15px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #fbbf24;
+    background: rgba(0,0,0,0.25);
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="loginBox" class="overlay show">
+    <div class="modal">
+        <h3>เข้าสู่ระบบ</h3>
+
+        <input id="user" placeholder="Username" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+        
+        <input id="pass" type="password" placeholder="Password" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:none;">
+
+        <label style="font-size:0.8rem;color:#94a3b8;">
+            <input type="checkbox" id="showPass"> แสดงรหัสผ่าน
+        </label>
+
+        <button onclick="login()" style="margin-top:10px;">Login</button>
+
+        <p id="loginErr" style="color:#f87171;font-size:0.8rem;margin-top:10px;"></p>
+    </div>
+</div>
+
+
+    <div class="app">
+        <h5>Baccarat Killer PRO</h5>
+
+        <div class="expiry-box">
+    ⏳ วันหมดอายุ: 3 พฤษภาคม พ.ศ. 2569
+</div>
+
+
+
+        <div class="stats-grid">
+            <div class="stat-item"><span class="stat-label">PLAYER</span><span id="statP" class="stat-value val-p">0</span></div>
+            <div class="stat-item"><span class="stat-label">BANKER</span><span id="statB" class="stat-value val-b">0</span></div>
+            <div class="stat-item"><span class="stat-label">TIE</span><span id="statT" class="stat-value val-t">0</span></div>
+            <div class="stat-item"><span class="stat-label">TOTAL</span><span id="statTotal" class="stat-value">0</span></div>
+        </div>
+
+        <div class="rate-box">
+            <div id="rateF1" class="rate-item">
+                <span class="rate-name">สูตร 1</span>
+                <span class="rate-percent">0%</span>
+                <span class="rate-prediction" id="betPred1">?</span>
+            </div>
+            <div id="rateF2" class="rate-item">
+                <span class="rate-name">สูตร 2</span>
+                <span class="rate-percent">0%</span>
+                <span class="rate-prediction" id="betPred2">?</span>
+            </div>
+            <div id="rateF3" class="rate-item">
+                <span class="rate-name">สูตร 3</span>
+                <span class="rate-percent">0%</span>
+                <span class="rate-prediction" id="betPred3">?</span>
+            </div>
+            <div id="rateF4" class="rate-item">
+                <span class="rate-name">สูตร 4</span>
+                <span class="rate-percent">0%</span>
+                <span class="rate-prediction" id="betPred4">?</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">BEAD ROAD (ประวัติการออกผล) - 6 แถวต่อคอลัมน์</div>
+            <div id="beadRoad" class="bead-grid"></div>
+        </div>
+
+        <div class="formula-container">
+            <div class="formula-table-wrapper">
+                <span class="formula-label">F1 HISTORY</span>
+                <table id="histF1"></table>
+            </div>
+            <div class="formula-table-wrapper">
+                <span class="formula-label">F2 HISTORY</span>
+                <table id="histF2"></table>
+            </div>
+            <div class="formula-table-wrapper">
+                <span class="formula-label">F3 HISTORY</span>
+                <table id="histF3"></table>
+            </div>
+            <div class="formula-table-wrapper">
+                <span class="formula-label">F4 HISTORY</span>
+                <table id="histF4"></table>
+            </div>
+        </div>
+
+        <div class="btns">
+            <button id="btn1" class="btn btn-p">P</button>
+            <button id="btn0" class="btn btn-t">T</button>
+            <button id="btn2" class="btn btn-b">B</button>
+        </div>
+
+        <div class="action-btns">
+            <button id="btnBck" class="btn-action">ย้อนกลับ (BACK)</button>
+            <button id="btnClr" class="btn-action btn-clr">ล้างข้อมูล (CLEAR)</button>
+        </div>
+
+        <div class="settings" id="checkGroup">
+            <label class="chk-label"><input type="checkbox" id="no1">N1</label>
+            <label class="chk-label"><input type="checkbox" id="no2">N2</label>
+            <label class="chk-label"><input type="checkbox" id="no3">N3</label>
+            <label class="chk-label"><input type="checkbox" id="no4">N4</label>
+            <label class="chk-label"><input type="checkbox" id="no5">N5</label>
+            <label class="chk-label"><input type="checkbox" id="no6">N6</label>
+        </div>
+    </div>
+
+    <div id="alertBox" class="overlay">
+        <div class="modal">
+            <h3>ยินดีต้อนรับ</h3>
+            <p>ระบบคำนวณบาคาร่าอัจฉริยะ PRO Version<br>แม่นยำกว่าเดิมด้วย 4 สูตรประมวลผล<br><br><strong>✨ อัปเดต: รวมตัวแทงเข้ากับเปอร์เซ็นต์</strong></p>
+            <button onclick="document.getElementById('alertBox').classList.remove('show')">เริ่มใช้งาน</button>
+        </div>
+    </div>
+
+    <script>
+
+        const EXPIRE_DATE = new Date('2026-05-03T23:59:59');
+
+function checkExpire() {
+    const now = new Date();
+
+    if (now > EXPIRE_DATE) {
+        document.body.innerHTML = "EXPIRED";
+        throw new Error("EXPIRED");
+    }
+}
+
+
+        
+let rawData = []; // เก็บผลทั้งหมด 0=T, 1=P, 2=B
+let cleanData = []; // เก็บเฉพาะ P, B สำหรับคำนวณสูตร
+
+// ================= LOGIN =================
+function login(){
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
+
+    if(u === "1234" && p === "1234"){
+        document.getElementById("loginBox").classList.remove("show");
+    } else {
+        document.getElementById("loginErr").textContent = "รหัสไม่ถูกต้อง";
+    }
+}
+
+// ================= PASSWORD TOGGLE =================
+window.addEventListener("DOMContentLoaded", () => {
+    const showPass = document.getElementById("showPass");
+    const pass = document.getElementById("pass");
+
+    if(showPass && pass){
+        showPass.addEventListener("change", function(){
+            pass.type = this.checked ? "text" : "password";
+        });
+    }
+});
+
+// ================= FUNCTION =================
+function invert(q) { 
+    return q === '1' ? '2' : (q === '2' ? '1' : ''); 
+}
+
+
+
+        function addResult(val) {
+            if (val === -2) { // Clear
+                if(confirm("ต้องการล้างข้อมูลทั้งหมดใช่หรือไม่?")) {
+                    rawData = [];
+                    cleanData = [];
+                } else return;
+            } else if (val === -1) { // Back
+                let last = rawData.pop();
+                if (last === 1 || last === 2) cleanData.pop();
+            } else {
+                rawData.push(val);
+                if (val === 1 || val === 2) cleanData.push(val);
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            updateStats();
+            renderBeadRoad();
+            calculateFormulas();
+        }
+
+      
+
+        function updateStats() {
+            let p = 0, b = 0, t = 0;
+            rawData.forEach(v => {
+                if (v === 1) p++;
+                else if (v === 2) b++;
+                else if (v === 0) t++;
+            });
+            document.getElementById("statP").textContent = p;
+            document.getElementById("statB").textContent = b;
+            document.getElementById("statT").textContent = t;
+            document.getElementById("statTotal").textContent = rawData.length;
+        }
+
+        function renderBeadRoad() {
+            const container = document.getElementById("beadRoad");
+            container.innerHTML = "";
+            rawData.forEach((v, index) => {
+                const div = document.createElement("div");
+                div.className = "bead " + (v === 1 ? "p" : (v === 2 ? "b" : "t"));
+                div.textContent = v === 1 ? "P" : (v === 2 ? "B" : "T");
+                
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function getCheck(i) { return document.getElementById('no' + (i + 1)).checked; }
+
+        function calculateFormulas() {
+            const n = [getCheck(0), getCheck(1), getCheck(2), getCheck(3), getCheck(4), getCheck(5)];
+            const v = (i) => cleanData[i] != null ? String(cleanData[i]) : null;
+            
+            let f1 = [], f2 = [], f3 = [], f4 = [];
+            
+            // คำนวณสูตรจาก cleanData (ข้าม 6 ตัวแรกเพื่อใช้เป็นฐาน)
+            for (let i = 6; i < cleanData.length + 1; i++) {
+                // F1
+                f1.push(n[3] ? v(i-6) : v(i-3));
+                // F2
+                f2.push(v(i-6) === v(i-3) ? v(i-3) : invert(v(i-3)));
+                // F3
+                f3.push(n[3] ? invert(v(i-6)) : v(i-3));
+                // F4
+                f4.push(n[0] ? v(i-4) : v(i-1));
+            }
+
+            const formulas = [f1, f2, f3, f4];
+            const results = formulas.map((f, idx) => processFormula(idx + 1, f));
+            
+            // หาตัวที่ดีที่สุด
+            let bestIdx = 0;
+            let maxRate = -1;
+            results.forEach((res, i) => {
+                if (res.rate > maxRate) {
+                    maxRate = res.rate;
+                    bestIdx = i;
+                }
+            });
+
+            // Update UI for best indicator and predictions
+            results.forEach((result, idx) => {
+                const rateEl = document.getElementById(`rateF${idx + 1}`);
+                const predEl = document.getElementById(`betPred${idx + 1}`);
+                
+                rateEl.classList.remove('best');
+                if (idx === bestIdx && maxRate > 0) {
+                    rateEl.classList.add('best');
+                }
+
+                if (cleanData.length < 6) {
+                    predEl.textContent = "?";
+                    predEl.className = "rate-prediction bet-wait-text";
+                } else {
+                    const nextBet = result.next;
+                    if (nextBet === "1") {
+                        predEl.textContent = "P";
+                        predEl.className = "rate-prediction bet-p-text";
+                    } else if (nextBet === "2") {
+                        predEl.textContent = "B";
+                        predEl.className = "rate-prediction bet-b-text";
+                    } else {
+                        predEl.textContent = "?";
+                        predEl.className = "rate-prediction bet-wait-text";
+                    }
+                }
+            });
+        }
+
+        function processFormula(id, fm) {
+            let win = 0;
+            let total = 0;
+            let history = [];
+            let nextBet = fm[fm.length - 1]; // ตัวสุดท้ายคือตัวที่แนะนำให้แทงตาถัดไป
+
+            // ตรวจสอบผลย้อนหลัง (ไม่รวมตัวสุดท้ายที่ยังไม่ออกผล)
+            for (let i = 0; i < fm.length - 1; i++) {
+                let predicted = fm[i];
+                let actual = String(cleanData[i + 6]);
+                if (predicted && actual) {
+                    total++;
+                    if (predicted === actual) {
+                        win++;
+                        history.push(true);
+                    } else {
+                        history.push(false);
+                    }
+                }
+            }
+
+            const rate = total > 0 ? Math.round((win / total) * 100) : 0;
+            
+            // Update UI for this formula
+            const rateEl = document.getElementById(`rateF${id}`);
+            rateEl.querySelector('.rate-percent').textContent = rate + "%";
+            rateEl.classList.remove('blink');
+            
+            // จัดการสีตามความแม่นยำ
+            if (rate >= 80) rateEl.style.borderColor = "#22c55e";
+            else if (rate >= 60) rateEl.style.borderColor = "#eab308";
+            else rateEl.style.borderColor = "#ef4444";
+
+            // Render History Table
+            const table = document.getElementById(`histF${id}`);
+            table.innerHTML = "";
+            let row;
+            history.slice(-20).forEach((isWin, i) => {
+                if (i % 5 === 0) row = table.insertRow();
+                let cell = row.insertCell();
+                cell.className = isWin ? "win" : "loss";
+            });
+
+            return { rate, next: nextBet };
+        }
+
+        // Event Listeners
+        document.getElementById('btn1').onclick = () => addResult(1);
+        document.getElementById('btn0').onclick = () => addResult(0);
+        document.getElementById('btn2').onclick = () => addResult(2);
+        document.getElementById('btnBck').onclick = () => addResult(-1);
+        document.getElementById('btnClr').onclick = () => addResult(-2);
+        
+        document.querySelectorAll('.chk-label input').forEach(input => {
+            input.onchange = (e) => {
+                e.target.parentElement.classList.toggle('active', e.target.checked);
+                updateUI();
+            };
+        });
+
+        // Auto Blink for Best Rate
+        setInterval(() => {
+            const rates = [
+                parseInt(document.getElementById('rateF1').querySelector('.rate-percent').textContent),
+                parseInt(document.getElementById('rateF2').querySelector('.rate-percent').textContent),
+                parseInt(document.getElementById('rateF3').querySelector('.rate-percent').textContent),
+                parseInt(document.getElementById('rateF4').querySelector('.rate-percent').textContent)
+            ];
+            let max = Math.max(...rates);
+            [1,2,3,4].forEach(i => {
+                const el = document.getElementById(`rateF${i}`);
+                const r = parseInt(el.querySelector('.rate-percent').textContent);
+                if (r === max && max > 0) {
+                    el.classList.add('best');
+                    if (max >= 80) el.classList.add('blink');
+                    else el.classList.remove('blink');
+                } else {
+                    el.classList.remove('best', 'blink');
+                }
+            });
+        }, 1000);
+
+      window.onload = () => {
+    checkExpire();   // 👈 วาง “ก่อนเริ่มระบบ”
+    document.getElementById('alertBox').classList.add('show');
+    updateUI();
+};
+
+
+    </script>
+</body>
+</html>
